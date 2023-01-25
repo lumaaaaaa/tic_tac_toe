@@ -1,7 +1,7 @@
 use std::io;
 
 fn main() {
-    println!("TicTacToe");
+    println!("Tic-Tac-Toe");
 
     let mut board = [['.'; 3]; 3];
     let mut round_count = 1;
@@ -39,15 +39,24 @@ fn main() {
 fn place_symbol(tile_location: &str, board: &mut [[char; 3]; 3], round_count: u32) {
     let mut tile_y = 0;
 
-    match tile_location.to_uppercase().chars().next().expect("Index out of bounds!") {
+    match tile_location
+        .to_uppercase()
+        .chars()
+        .next()
+        .expect("Index out of bounds!") {
         'A' => tile_y = 0,
         'B' => tile_y = 1,
         'C' => tile_y = 2,
         _ => {} // what should I do here?
     }
 
-    let tile_x = tile_location.chars().nth(1).expect("Index out of bounds!");
-    let tile_x = tile_x.to_digit(10).expect("Not a digit!") - 1;
+    let tile_x = tile_location
+        .chars()
+        .nth(1)
+        .expect("Index out of bounds!");
+    let tile_x = tile_x
+        .to_digit(10)
+        .expect("Not a digit!") - 1;
 
     if round_count % 2 == 0 {
         board[tile_x as usize][tile_y] = 'O';
