@@ -3,7 +3,7 @@ use std::io;
 fn main() {
     println!("TicTacToe");
 
-    let mut board = vec![vec!['.'; 3]; 3];
+    let mut board = [['.'; 3]; 3];
     let mut round_count = 1;
     let mut game_over = false;
 
@@ -36,7 +36,7 @@ fn main() {
     }
 }
 
-fn place_symbol(tile_location: &str, board: &mut [Vec<char>], round_count: u32) {
+fn place_symbol(tile_location: &str, board: &mut [[char; 3]; 3], round_count: u32) {
     let mut tile_y = 0;
 
     match tile_location.to_uppercase().chars().next().expect("Index out of bounds!") {
@@ -57,7 +57,7 @@ fn place_symbol(tile_location: &str, board: &mut [Vec<char>], round_count: u32) 
 
 }
 
-fn print_board(board: &Vec<Vec<char>>) {
+fn print_board(board: &[[char; 3]; 3]) {
     for y in board {
         for x in y {
             print!("{}", x);
@@ -69,7 +69,7 @@ fn print_board(board: &Vec<Vec<char>>) {
 
 // returns true if a player has won, returns false otherwise
 // this function is only designed to be used after a player's turn, called at the end of every round
-fn check_for_win(board: &Vec<Vec<char>>, round_count: u32) -> bool {
+fn check_for_win(board: &[[char; 3]; 3], round_count: u32) -> bool {
     if round_count == 9 {
         return true;
     }
