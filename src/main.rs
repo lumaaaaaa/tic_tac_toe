@@ -26,12 +26,20 @@ fn main() {
 
         round_count += 1;
     }
+
+    if round_count == 10 {
+        println!("Draw! Final board:");
+        print_board(&board);
+    } else {
+        println!("Player {} wins! Final board:", (round_count - 1) % 2 + 1);
+        print_board(&board);
+    }
 }
 
-fn place_symbol(tile_location: &String, board: &mut Vec<Vec<char>>, round_count: u32) {
+fn place_symbol(tile_location: &str, board: &mut [Vec<char>], round_count: u32) {
     let mut tile_y = 0;
 
-    match tile_location.to_uppercase().chars().nth(0).expect("Index out of bounds!") {
+    match tile_location.to_uppercase().chars().next().expect("Index out of bounds!") {
         'A' => tile_y = 0,
         'B' => tile_y = 1,
         'C' => tile_y = 2,
@@ -63,18 +71,12 @@ fn print_board(board: &Vec<Vec<char>>) {
 // this function is only designed to be used after a player's turn, called at the end of every round
 fn check_for_win(board: &Vec<Vec<char>>, round_count: u32) -> bool {
     if round_count == 9 {
-        println!("Draw! Final board:");
-        print_board(&board);
         return true;
     }
-
-    let player_num = (round_count - 1) % 2 + 1;
 
     // horizontal wins
     for y in board {
         if y[0] == y[1] && y[0] == y[2] && y[0] != '.' {
-            println!("Player {} wins! Final board:", player_num);
-            print_board(&board);
             return true;
         }
     }
@@ -82,21 +84,15 @@ fn check_for_win(board: &Vec<Vec<char>>, round_count: u32) -> bool {
     // vertical wins
     for i in 0..=2 {
         if board[0][i] == board[1][i] && board[0][i] == board[2][i] && board[0][i] != '.' {
-            println!("Player {} wins! Final board:", player_num);
-            print_board(&board);
             return true;
         }
     }
 
     // diagonal wins
     if board[0][0] == board[1][1] && board[0][0] == board[2][2] && board[0][0] != '.' {
-        println!("Player {} wins! Final board:", player_num);
-        print_board(&board);
         return true;
     }
     if board[0][2] == board[1][1] && board[0][2] == board[2][0] && board[0][2] != '.' {
-        println!("Player {} wins! Final board:", player_num);
-        print_board(&board);
         return true;
     }
 
