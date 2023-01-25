@@ -12,15 +12,22 @@ fn main() {
     while !game_over {
         print_board(&board);
 
-        println!("Player {}: Enter the tile you want to place your symbol (A1 would be top left):", (round_count - 1) % 2 + 1);
+        loop {
+            tile_location.clear();
 
-        io::stdin()
-            .read_line(&mut tile_location)
-            .expect("Failed to read line!");
+            println!("Player {}: Enter the tile you want to place your symbol (a1 would be top left):", (round_count - 1) % 2 + 1);
+
+            io::stdin()
+                .read_line(&mut tile_location)
+                .expect("Failed to read line!");
+
+            match validate_input(&tile_location.trim()) {
+                Ok(()) => break,
+                Err(err) => println!("{}", err)
+            }
+        }
 
         place_symbol(&tile_location, &mut board, round_count);
-
-        tile_location.clear();
 
         game_over = check_for_win(&board, round_count);
 
@@ -36,17 +43,37 @@ fn main() {
     }
 }
 
+fn validate_input(input: &str) -> Result<(), &str>{
+    if input.len() != 2 {
+        return Err("Please enter no more than 2 characters!")
+    }
+
+    if input.to_lowercase().chars().next().unwrap() != 'a' &&
+        input.to_lowercase().chars().next().unwrap() != 'b' &&
+        input.to_lowercase().chars().next().unwrap() != 'c' {
+        return Err("Make sure your first character (the column) is either 'a', 'b', or 'c'!")
+    }
+
+    if input.to_lowercase().chars().nth(1).unwrap() != '1' &&
+        input.to_lowercase().chars().nth(1).unwrap() != '2' &&
+        input.to_lowercase().chars().nth(1).unwrap() != '3' {
+        return Err("Make sure your second character (the row) is either '1', '2', or '3'!")
+    }
+
+    Ok(())
+}
+
 fn place_symbol(tile_location: &str, board: &mut [[char; 3]; 3], round_count: u32) {
     let mut tile_y = 0;
 
     match tile_location
-        .to_uppercase()
+        .to_lowercase()
         .chars()
         .next()
         .expect("Index out of bounds!") {
-        'A' => tile_y = 0,
-        'B' => tile_y = 1,
-        'C' => tile_y = 2,
+        'a' => tile_y = 0,
+        'b' => tile_y = 1,
+        'c' => tile_y = 2,
         _ => {} // what should I do here?
     }
 
